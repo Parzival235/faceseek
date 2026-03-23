@@ -1,6 +1,6 @@
 # DISCLAIMER & TERMS OF USE
 
-## 1. Purpose of This Software
+## 1. Purpose of This Softwara
 
 FaceSeek is an **open-source educational project** developed as part of a 100-day public coding challenge. It demonstrates the integration of on-device machine learning with reverse image search APIs in a Flutter mobile application.
 
