@@ -62,9 +62,6 @@ The developer(s) of this project **bear no responsibility** for misuse of this s
 - [ ] Day 51-75 — UI/UX improvements
 - [ ] Day 76-100 — Beta, launch, stores
 
-_Full roadmap updated daily on [Forg](https://forg.to)_
-
----
 
 ## 🚀 Getting Started
 
@@ -114,5 +111,5 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ## 👤 Author
 
-Built in public, one day at a time. Follow the journey on [Forg](https://forg.to).
+Built in public, one day at a time.
 
