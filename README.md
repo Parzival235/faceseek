@@ -74,7 +74,7 @@ The developer(s) of this project **bear no responsibility** for misuse of this s
 ### Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/faceseek.git
+git clone https://github.com/Parzival235/faceseek.git
 cd faceseek
 flutter pub get
 ```
