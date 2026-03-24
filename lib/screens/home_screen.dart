@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_theme.dart';
 import '../widgets/upload_card.dart';
 import '../widgets/disclaimer_banner.dart';
+import 'camera_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -23,7 +25,9 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 28),
                   _buildHeroSection(context),
                   const SizedBox(height: 32),
-                  const UploadCard(),
+                  UploadCard(
+                    onCameraPressed: () => _openCamera(context),
+                  ),
                   const SizedBox(height: 32),
                   _buildHowItWorks(context),
                   const SizedBox(height: 40),
@@ -34,6 +38,17 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _openCamera(BuildContext context) async {
+    final result = await Navigator.push<File>(
+      context,
+      MaterialPageRoute(builder: (_) => const CameraScreen()),
+    );
+    if (result != null) {
+      // TODO Day 8+ — pass image to face detector
+      debugPrint('Got image from camera: ${result.path}');
+    }
   }
 
   SliverAppBar _buildAppBar(BuildContext context) {
