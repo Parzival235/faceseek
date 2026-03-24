@@ -4,7 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import '../theme/app_theme.dart';
 
 class UploadCard extends StatefulWidget {
-  const UploadCard({super.key});
+  final VoidCallback? onCameraPressed;
+  const UploadCard({super.key, this.onCameraPressed});
 
   @override
   State<UploadCard> createState() => _UploadCardState();
@@ -163,7 +164,7 @@ class _UploadCardState extends State<UploadCard> {
             child: _ActionButton(
               icon: Icons.camera_alt_rounded,
               label: 'Camera',
-              onTap: () => _pickImage(ImageSource.camera),
+              onTap: widget.onCameraPressed ?? () => _pickImage(ImageSource.camera),
             ),
           ),
           if (_selectedImage != null) ...[
