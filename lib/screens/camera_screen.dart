@@ -319,7 +319,7 @@ class _FaceGuideOverlay extends StatelessWidget {
         border: Border.all(
           color: isCapturing
               ? AppTheme.accent
-              : Colors.white.withOpacity(0.5),
+              : Colors.white.withValues(alpha: 0.5),
           width: isCapturing ? 3 : 1.5,
         ),
       ),
@@ -347,7 +347,7 @@ class _CircleButton extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           color: active
-              ? AppTheme.primary.withOpacity(0.3)
+              ? AppTheme.primary.withValues(alpha: 0.3)
               : Colors.black38,
           shape: BoxShape.circle,
           border: Border.all(
