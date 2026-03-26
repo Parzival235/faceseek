@@ -236,7 +236,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(90),
                         border: Border.all(
-                          color: AppTheme.accent.withOpacity(0.7),
+                          color: AppTheme.accent.withValues(alpha: 0.7),
                           width: 2,
                         ),
                       ),
