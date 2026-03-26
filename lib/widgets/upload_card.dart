@@ -5,7 +5,8 @@ import '../theme/app_theme.dart';
 
 class UploadCard extends StatefulWidget {
   final VoidCallback? onCameraPressed;
-  const UploadCard({super.key, this.onCameraPressed});
+  final VoidCallback? onGalleryPressed;
+  const UploadCard({super.key, this.onCameraPressed, this.onGalleryPressed});
 
   @override
   State<UploadCard> createState() => _UploadCardState();
@@ -156,7 +157,7 @@ class _UploadCardState extends State<UploadCard> {
             child: _ActionButton(
               icon: Icons.photo_library_rounded,
               label: 'Gallery',
-              onTap: () => _pickImage(ImageSource.gallery),
+              onTap: widget.onGalleryPressed ?? () => _pickImage(ImageSource.gallery),
             ),
           ),
           const SizedBox(width: 12),
