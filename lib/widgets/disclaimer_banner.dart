@@ -18,9 +18,9 @@ class _DisclaimerBannerState extends State<DisclaimerBanner> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFFF9800).withOpacity(0.1),
+        color: const Color(0xFFFF9800).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFFF9800).withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFFFF9800).withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +35,7 @@ class _DisclaimerBannerState extends State<DisclaimerBanner> {
             child: Text(
               'For personal & research use only. Do not use to identify or track others without consent.',
               style: TextStyle(
-                color: const Color(0xFFFF9800).withOpacity(0.9),
+                color: const Color(0xFFFF9800).withValues(alpha: 0.9),
                 fontSize: 12,
                 height: 1.5,
               ),
