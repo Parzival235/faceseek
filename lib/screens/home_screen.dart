@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/upload_card.dart';
 import '../widgets/disclaimer_banner.dart';
 import 'camera_screen.dart';
+import 'gallery_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -27,6 +28,7 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 32),
                   UploadCard(
                     onCameraPressed: () => _openCamera(context),
+                    onGalleryPressed: () => _openGallery(context),
                   ),
                   const SizedBox(height: 32),
                   _buildHowItWorks(context),
@@ -38,6 +40,17 @@ class HomeScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _openGallery(BuildContext context) async {
+    final result = await Navigator.push<File>(
+      context,
+      MaterialPageRoute(builder: (_) => const GalleryScreen()),
+    );
+    if (result != null) {
+      // TODO Day 8+ — pass image to face detector
+      debugPrint('Got image from gallery: ${result.path}');
+    }
   }
 
   Future<void> _openCamera(BuildContext context) async {
