@@ -53,7 +53,7 @@ The developer(s) of this project **bear no responsibility** for misuse of this s
 
 - [x] Day 1 — Project setup, basic UI scaffold
 - [x] Day 2 — Camera integration
-- [ ] Day 3 — Gallery picker
+- [x] Day 3 — Gallery picker
 - [ ] Day 4-7 — ML Kit face detection
 - [ ] Day 8-12 — Face crop & preview
 - [ ] Day 13-20 — SerpAPI integration
