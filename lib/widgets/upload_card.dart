@@ -1,32 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import '../theme/app_theme.dart';
 
-class UploadCard extends StatefulWidget {
-  final VoidCallback? onCameraPressed;
-  final VoidCallback? onGalleryPressed;
-  const UploadCard({super.key, this.onCameraPressed, this.onGalleryPressed});
+class UploadCard extends StatelessWidget {
+  final VoidCallback onCameraPressed;
+  final VoidCallback onGalleryPressed;
+  final File? selectedImage;
+  final VoidCallback? onClearImage;
 
-  @override
-  State<UploadCard> createState() => _UploadCardState();
-}
-
-class _UploadCardState extends State<UploadCard> {
-  File? _selectedImage;
-  final _picker = ImagePicker();
-
-  Future<void> _pickImage(ImageSource source) async {
-    final picked = await _picker.pickImage(
-      source: source,
-      imageQuality: 90,
-      maxWidth: 1200,
-    );
-    if (picked != null) {
-      setState(() => _selectedImage = File(picked.path));
-      // TODO Day 8+ — trigger ML Kit face detection
-    }
-  }
+  const UploadCard({
+    super.key,
+    required this.onCameraPressed,
+    required this.onGalleryPressed,
+    this.selectedImage,
+    this.onClearImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +22,26 @@ class _UploadCardState extends State<UploadCard> {
       decoration: BoxDecoration(
         color: AppTheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppTheme.surfaceVariant,
-          width: 1.5,
-        ),
+        border: Border.all(color: AppTheme.surfaceVariant, width: 1.5),
       ),
       child: Column(
         children: [
-          _buildImageArea(),
+          _buildImageArea(context),
           const Divider(color: AppTheme.surfaceVariant, height: 1),
-          _buildActions(),
+          _buildActions(context),
         ],
       ),
     );
   }
 
-  Widget _buildImageArea() {
-    if (_selectedImage != null) {
+  Widget _buildImageArea(BuildContext context) {
+    if (selectedImage != null) {
       return ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: Stack(
           children: [
             Image.file(
-              _selectedImage!,
+              selectedImage!,
               width: double.infinity,
               height: 280,
               fit: BoxFit.cover,
@@ -65,7 +50,7 @@ class _UploadCardState extends State<UploadCard> {
               top: 12,
               right: 12,
               child: GestureDetector(
-                onTap: () => setState(() => _selectedImage = null),
+                onTap: onClearImage,
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
@@ -107,7 +92,7 @@ class _UploadCardState extends State<UploadCard> {
     }
 
     return InkWell(
-      onTap: () => _pickImage(ImageSource.gallery),
+      onTap: onGalleryPressed,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       child: Container(
         height: 200,
@@ -119,7 +104,7 @@ class _UploadCardState extends State<UploadCard> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppTheme.primary.withOpacity(0.1),
+                color: AppTheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -148,7 +133,7 @@ class _UploadCardState extends State<UploadCard> {
     );
   }
 
-  Widget _buildActions() {
+  Widget _buildActions(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -157,7 +142,7 @@ class _UploadCardState extends State<UploadCard> {
             child: _ActionButton(
               icon: Icons.photo_library_rounded,
               label: 'Gallery',
-              onTap: widget.onGalleryPressed ?? () => _pickImage(ImageSource.gallery),
+              onTap: onGalleryPressed,
             ),
           ),
           const SizedBox(width: 12),
@@ -165,10 +150,10 @@ class _UploadCardState extends State<UploadCard> {
             child: _ActionButton(
               icon: Icons.camera_alt_rounded,
               label: 'Camera',
-              onTap: widget.onCameraPressed ?? () => _pickImage(ImageSource.camera),
+              onTap: onCameraPressed,
             ),
           ),
-          if (_selectedImage != null) ...[
+          if (selectedImage != null) ...[
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton.icon(
