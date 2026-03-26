@@ -7,16 +7,68 @@ import '../widgets/disclaimer_banner.dart';
 import 'camera_screen.dart';
 import 'gallery_screen.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  // HomeScreen owns the selected image state — single source of truth
+  File? _selectedImage;
+
+  // ── Navigation ─────────────────────────────────────────────────
+
+  Future<void> _openGallery() async {
+    try {
+      final result = await Navigator.push<File>(
+        context,
+        MaterialPageRoute(builder: (_) => const GalleryScreen()),
+      );
+      if (result != null && mounted) {
+        setState(() => _selectedImage = result);
+      }
+    } catch (e) {
+      if (mounted) _showError('Could not open gallery. Please try again.');
+    }
+  }
+
+  Future<void> _openCamera() async {
+    try {
+      final result = await Navigator.push<File>(
+        context,
+        MaterialPageRoute(builder: (_) => const CameraScreen()),
+      );
+      if (result != null && mounted) {
+        setState(() => _selectedImage = result);
+      }
+    } catch (e) {
+      if (mounted) _showError('Could not open camera. Please try again.');
+    }
+  }
+
+  void _clearImage() => setState(() => _selectedImage = null);
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppTheme.error,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  // ── Build ──────────────────────────────────────────────────────
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            _buildAppBar(context),
+            _buildAppBar(),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               sliver: SliverList(
@@ -24,14 +76,16 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   const DisclaimerBanner(),
                   const SizedBox(height: 28),
-                  _buildHeroSection(context),
+                  _buildHeroSection(),
                   const SizedBox(height: 32),
                   UploadCard(
-                    onCameraPressed: () => _openCamera(context),
-                    onGalleryPressed: () => _openGallery(context),
+                    onCameraPressed: _openCamera,
+                    onGalleryPressed: _openGallery,
+                    selectedImage: _selectedImage,
+                    onClearImage: _clearImage,
                   ),
                   const SizedBox(height: 32),
-                  _buildHowItWorks(context),
+                  _buildHowItWorks(),
                   const SizedBox(height: 40),
                 ]),
               ),
@@ -42,29 +96,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _openGallery(BuildContext context) async {
-    final result = await Navigator.push<File>(
-      context,
-      MaterialPageRoute(builder: (_) => const GalleryScreen()),
-    );
-    if (result != null) {
-      // TODO Day 8+ — pass image to face detector
-      debugPrint('Got image from gallery: ${result.path}');
-    }
-  }
-
-  Future<void> _openCamera(BuildContext context) async {
-    final result = await Navigator.push<File>(
-      context,
-      MaterialPageRoute(builder: (_) => const CameraScreen()),
-    );
-    if (result != null) {
-      // TODO Day 8+ — pass image to face detector
-      debugPrint('Got image from camera: ${result.path}');
-    }
-  }
-
-  SliverAppBar _buildAppBar(BuildContext context) {
+  SliverAppBar _buildAppBar() {
     return SliverAppBar(
       backgroundColor: AppTheme.background,
       pinned: true,
@@ -74,7 +106,7 @@ class HomeScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: AppTheme.primary.withOpacity(0.15),
+              color: AppTheme.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(
@@ -97,7 +129,6 @@ class HomeScreen extends ConsumerWidget {
         IconButton(
           icon: const Icon(Icons.history_rounded, color: AppTheme.onSurfaceMuted),
           onPressed: () {
-            // TODO Day 21+ - history screen
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Coming soon — Day 21+')),
             );
@@ -108,7 +139,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
+  Widget _buildHeroSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -132,7 +163,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHowItWorks(BuildContext context) {
+  Widget _buildHowItWorks() {
     final steps = [
       (Icons.upload_rounded, 'Upload', 'Take a photo or pick from gallery'),
       (Icons.face_rounded, 'Detect', 'ML Kit finds the face on-device'),
