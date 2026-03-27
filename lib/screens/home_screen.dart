@@ -6,6 +6,7 @@ import '../widgets/upload_card.dart';
 import '../widgets/disclaimer_banner.dart';
 import 'camera_screen.dart';
 import 'gallery_screen.dart';
+import 'detection_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
       if (result != null && mounted) {
         setState(() => _selectedImage = result);
+        _goToDetection(result);
       }
     } catch (e) {
       if (mounted) _showError('Could not open gallery. Please try again.');
@@ -42,10 +44,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
       if (result != null && mounted) {
         setState(() => _selectedImage = result);
+        _goToDetection(result);
       }
     } catch (e) {
       if (mounted) _showError('Could not open camera. Please try again.');
     }
+  }
+
+  void _goToDetection(File imageFile) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DetectionScreen(imageFile: imageFile),
+      ),
+    );
   }
 
   void _clearImage() => setState(() => _selectedImage = null);
